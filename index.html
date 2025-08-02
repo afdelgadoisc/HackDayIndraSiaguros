@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Seguros IA</title>
+  <style>
+    :root {
+      --primary: #007BFF;
+      --primary-dark: #0056b3;
+      --bg: #f5f8fa;
+      --text: #333;
+      --card-bg: #ffffff;
+      --card-shadow: rgba(0, 0, 0, 0.1);
+      --accent: #28a745;
+      --accent-dark: #218838;
+      --danger: #dc3545;
+      --info: #17a2b8;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+      color:var(--text);
+      background:var(--bg);
+      line-height:1.6;
+      position:relative;
+    }
+    .container { width:90%; max-width:1200px; margin:0 auto; padding:2rem 0; }
+
+    /* Header */
+    header {
+      background:var(--card-bg);
+      box-shadow:0 2px 4px var(--card-shadow);
+      position:sticky; top:0; z-index:100;
+    }
+    nav.container { display:flex; align-items:center; justify-content:space-between; }
+    header h1 { color:var(--primary-dark); font-size:1.8rem; }
+    nav ul { list-style:none; display:flex; flex-wrap:wrap; }
+    nav li + li { margin-left:1.5rem; }
+    nav a { text-decoration:none; color:var(--text); font-weight:500; transition:color .2s; }
+    nav a:hover, nav a.active { color:var(--primary); }
+
+    /* Modal disclaimer */
+    #overlay {
+      position:fixed; top:0; left:0; width:100%; height:100%;
+      background:rgba(0,0,0,0.5); display:flex;
+      align-items:center; justify-content:center; z-index:1000;
+    }
+    #disclaimer {
+      background:var(--card-bg); padding:2rem; border-radius:8px;
+      box-shadow:0 4px 12px var(--card-shadow); max-width:500px;
+      text-align:center;
+    }
+    #disclaimer h2 { margin-bottom:1rem; color:var(--primary-dark); }
+    #disclaimer p { margin-bottom:1.5rem; }
+    #disclaimer button {
+      padding:.75rem 1.5rem; border:none; border-radius:4px;
+      font-size:1rem; cursor:pointer;
+      background:var(--info); color:#fff;
+      transition:background .2s;
+    }
+    #disclaimer button:hover { background:var(--primary); }
+
+    /* Sections */
+    #inicio {
+      background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+      color:#fff; text-align:center; padding:4rem 1rem;
+    }
+    #inicio h2 { font-size:2.5rem; margin-bottom:1rem; }
+    #inicio p { font-size:1.1rem; margin-bottom:2rem; }
+    #inicio .btn {
+      display:inline-block; padding:.75rem 1.5rem;
+      background:#fff; color:var(--primary-dark);
+      border-radius:4px; font-weight:600; text-decoration:none;
+      transition:background .2s,color .2s;
+    }
+    #inicio .btn:hover { background:var(--primary-dark); color:#fff; }
+
+    #productos { padding:3rem 0; }
+    #productos h2 { text-align:center; margin-bottom:2rem; font-size:2rem; }
+
+    .grid {
+      display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+      gap:2rem;
+    }
+    .card {
+      background:var(--card-bg); border-radius:8px;
+      box-shadow:0 4px 8px var(--card-shadow); padding:2rem;
+      transition:transform .2s;
+    }
+    .card:hover { transform:translateY(-5px); }
+    .card-icon { font-size:3rem; margin-bottom:1rem; color:var(--primary); }
+    .card h3 { margin-bottom:.5rem; font-size:1.5rem; color:var(--primary-dark); }
+    .card p { font-size:1rem; color:#555; margin-bottom:1rem; }
+    .features-list { list-style-type:disc; padding-left:1.25rem; margin-bottom:1rem; }
+    .coverage-table { width:100%; border-collapse:collapse; margin-top:1rem; }
+    .coverage-table th, .coverage-table td { border:1px solid #ddd; padding:0.5rem; text-align:left; }
+    .coverage-table th { background:var(--primary-dark); color:#fff; }
+
+    #cotizacion {
+      background:var(--card-bg); padding:3rem 1rem; margin:2rem 0;
+      border-radius:8px; box-shadow:0 4px 8px var(--card-shadow);
+    }
+    #cotizacion h2 { text-align:center; margin-bottom:1.5rem; font-size:2rem; }
+    #cotizacion form {
+      display:grid; gap:1rem; max-width:600px; margin:0 auto;
+    }
+    #cotizacion label { font-weight:500; }
+    #cotizacion input, #cotizacion select, #cotizacion button {
+      padding:.75rem; border:1px solid var(--primary);
+      border-radius:4px; font-size:1rem; width:100%;
+    }
+    #cotizacion button {
+      background:var(--accent); color:#fff; border:none;
+      cursor:pointer; transition:background .2s; font-weight:600;
+    }
+    #cotizacion button:hover { background:var(--accent-dark); }
+
+    #faq { padding:3rem 0; }
+    #faq h2 { text-align:center; margin-bottom:2rem; font-size:2rem; }
+    .faq-item details {
+      background:var(--card-bg); padding:1rem;
+      border-radius:4px; box-shadow:0 2px 4px var(--card-shadow);
+      margin-bottom:1rem;
+    }
+    .faq-item summary { font-weight:600; cursor:pointer; }
+    .faq-item p { margin-top:.5rem; color:#555; }
+
+    #testimonios { padding:3rem 0; background:var(--bg); }
+    #testimonios h2 { text-align:center; margin-bottom:2rem; font-size:2rem; }
+    .testimonial blockquote {
+      background:var(--card-bg); padding:1rem;
+      border-left:4px solid var(--accent); font-style:italic;
+      color:#555; box-shadow:0 2px 4px var(--card-shadow); margin:0;
+    }
+    .testimonial cite {
+      display:block; text-align:right; margin-top:.5rem;
+      color:var(--primary-dark);
+    }
+
+    #equipo { padding:3rem 0; }
+    #equipo h2 { text-align:center; margin-bottom:2rem; font-size:2rem; }
+    .team {
+      display:flex; flex-wrap:wrap; justify-content:center; gap:2rem;
+    }
+    .member { text-align:center; max-width:200px; }
+    .member img {
+      width:120px; height:120px; border-radius:50%; object-fit:cover;
+      margin-bottom:.75rem; border:3px solid var(--accent);
+    }
+    .member h4 { margin-bottom:.25rem; font-size:1.1rem; }
+    .member p { font-size:.9rem; color:#555; }
+
+    #contacto { padding:3rem 0; }
+    #contacto h2 { text-align:center; margin-bottom:1rem; font-size:2rem; }
+    #contacto p {
+      text-align:center; font-size:1rem; color:#555;
+    }
+    #contacto a { color:var(--primary); text-decoration:none; }
+    #contacto a:hover { text-decoration:underline; }
+
+    footer {
+      background:var(--card-bg); text-align:center; padding:1rem 0;
+      font-size:.9rem; color:#777; box-shadow:0 -2px 4px var(--card-shadow);
+    }
+
+    /* Mic button */
+    #micBtn {
+      position:fixed; bottom:20px; right:20px;
+      width:60px; height:60px; border-radius:50%;
+      background:var(--primary); border:none;
+      display:flex; align-items:center; justify-content:center;
+      font-size:1.8rem; color:#fff; cursor:pointer;
+      box-shadow:0 4px 10px rgba(0,0,0,0.2);
+      transition:transform .2s,background .2s; z-index:900;
+    }
+    #micBtn:disabled { opacity:0.5; cursor:not-allowed; }
+    #micBtn:hover:not(:disabled) { background:var(--primary-dark); transform:scale(1.1); }
+
+    @media(max-width:600px){
+      .team{ flex-direction:column; align-items:center; }
+    }
+
+    #avatarAsistente {
+      position: fixed;
+      bottom: 100px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+      background: white;
+      border-radius: 30px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      padding: 10px;
+      cursor: pointer;
+      transition: transform 0.2s;
+      z-index: 1000;
+    }
+ 
+    #avatarAsistente:hover {
+      transform: scale(1.05);
+    }
+ 
+    #avatarAsistente img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+ 
+    #avatarAsistente .mensaje {
+      font-size: 0.9rem;
+      color: var(--text);
+      max-width: 160px;
+      line-height: 1.2;
+    }
+  </style>
+</head>
+<body>
+  <!-- Modal disclaimer -->
+  <div id="overlay">
+    <div id="disclaimer">
+      <h2>Permiso de Voz</h2>
+      <p>Para mejorar tu experiencia, necesitamos permiso para monitorear tu navegación por voz. ¿Aceptas?</p>
+      <button id="acceptBtn">Aceptar</button>
+    </div>
+  </div>
+
+  <header>
+    <div class="container nav-container">
+      <h1>Seguros IA</h1>
+      <nav>
+        <ul>
+          <li><a href="#inicio" class="active">Inicio</a></li>
+          <li><a href="#productos">Productos</a></li>
+          <li><a href="#cotizacion">Cotizacion</a></li>
+          <li><a href="#testimonios">Testimonios</a></li>
+          <li><a href="#contacto">Contacto</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div id="avatarAsistente">
+      <img src="https://cdn-icons-png.flaticon.com/512/4712/4712100.png" alt="Asistente Virtual" />
+      <div class="mensaje">
+      <strong>sIAguro</strong><br />
+          Tu asesora IA 🤖<br />
+          ¿En qué puedo ayudarte?
+      </div>
+      </div>
+    <section id="inicio">
+      <div class="container">
+        <h2>Protege tu futuro hoy</h2>
+        <p>Ofrecemos planes integrales con coberturas diseñadas para dar tranquilidad a ti y tu familia, adaptándonos a tus necesidades.</p>
+        <a href="#cotizacion" class="btn">Comenzar Cotización</a>
+      </div>
+    </section>
+
+    <section id="productos" class="container">
+      <h2>Nuestros Planes</h2>
+      <div class="grid">
+        <!-- Planes de Hogar -->
+        <div class="card" id="plan-hogar-basico">
+          <div class="card-icon">🏡</div>
+          <h3>Hogar Básico</h3>
+          <p>Protección esencial de tu vivienda frente a los riesgos más comunes.</p>
+          <ul class="features-list">
+            <li>Incendios y explosiones</li>
+            <li>Robo con fuerza</li>
+          </ul>
+          <table class="coverage-table">
+            <thead>
+              <tr><th>Cobertura</th><th>Límite</th><th>Deducible</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Incendio</td><td>$50.000.000</td><td>5%</td></tr>
+              <tr><td>Robo</td><td>$25.000.000</td><td>$500.000</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card" id="plan-hogar-premium">
+          <div class="card-icon">🏠</div>
+          <h3>Hogar Premium</h3>
+          <p>Cobertura total y deducibles reducidos para tu tranquilidad.</p>
+          <ul class="features-list">
+            <li>Incendios, explosiones y caída de rayo</li>
+            <li>Robo con fuerza en domicilio</li>
+            <li>Responsabilidad civil familiar</li>
+            <li>Fenómenos naturales y daños por agua</li>
+            <li>Asistencia legal post-siniestro</li>
+          </ul>
+          <table class="coverage-table">
+            <thead>
+              <tr><th>Cobertura</th><th>Límite</th><th>Deducible</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Incendio</td><td>$200.000.000</td><td>2%</td></tr>
+              <tr><td>Robo</td><td>$100.000.000</td><td>$200.000</td></tr>
+              <tr><td>Responsabilidad Civil</td><td>$50.000.000</td><td>3%</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Planes de Auto -->
+        <div class="card" id="plan-auto-basico">
+          <div class="card-icon">🚘</div>
+          <h3>Auto Básico</h3>
+          <p>Cobertura mínima para circular con tranquilidad.</p>
+          <ul class="features-list">
+            <li>Choque y colisión</li>
+            <li>Robo total</li>
+          </ul>
+          <table class="coverage-table">
+            <thead>
+              <tr><th>Servicio</th><th>Límite/Detalle</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Reparación</td><td>Hasta $40.000.000</td></tr>
+              <tr><td>Robo</td><td>Hasta $20.000.000</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card" id="plan-auto-premium">
+          <div class="card-icon">🚗</div>
+          <h3>Auto Premium</h3>
+          <p>Cobertura completa y asistencia extra en cada kilómetro.</p>
+          <ul class="features-list">
+            <li>Choque y colisión</li>
+            <li>Robo total y parcial</li>
+            <li>Asistencia 24/7</li>
+            <li>Auto sustituto</li>
+            <li>Protección contra daños a terceros</li>
+          </ul>
+          <table class="coverage-table">
+            <thead>
+              <tr><th>Servicio</th><th>Límite/Detalle</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Reparación</td><td>Hasta $120.000.000</td></tr>
+              <tr><td>Robo</td><td>Hasta $80.000.000</td></tr>
+              <tr><td>Asistencia</td><td>Incluida</td></tr>
+              <tr><td>Auto sustituto</td><td>Máximo 7 días</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Planes de Salud -->
+        <div class="card" id="plan-salud-basico">
+          <div class="card-icon">🏥</div>
+          <h3>Salud Básico</h3>
+          <p>Cobertura esencial en consultas y urgencias.</p>
+          <ul class="features-list">
+            <li>Consultas generales</li>
+            <li>Hospitalización</li>
+            <li>Urgencias con copago</li>
+          </ul>
+          <table class="coverage-table">
+            <thead>
+              <tr><th>Servicio</th><th>Cobertura</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Hospitalización</td><td>80%</td></tr>
+              <tr><td>Consultas</td><td>Copago $20.000</td></tr>
+              <tr><td>Urgencias</td><td>Límite $2.000.000</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card" id="plan-salud-premium">
+          <div class="card-icon">🩺</div>
+          <h3>Salud Premium</h3>
+          <p>Atención integral sin copagos, dental y oftalmología incluidos.</p>
+          <ul class="features-list">
+            <li>Consultas ilimitadas</li>
+            <li>Exámenes y laboratorio</li>
+            <li>Hospitalización y cirugía</li>
+            <li>Cobertura dental y oftalmológica</li>
+            <li>Cobertura internacional</li>
+          </ul>
+          <table class="coverage-table">
+            <thead>
+              <tr><th>Servicio</th><th>Cobertura</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Hospitalización</td><td>100%</td></tr>
+              <tr><td>Consultas</td><td>Sin copago</td></tr>
+              <tr><td>Urgencias</td><td>Sin límite</td></tr>
+              <tr><td>Dental y Oftalología</td><td>Incluida</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="cotizacion">
+      <div class="container">
+        <h2>Solicita tu Cotización</h2>
+        <form>
+          <label for="tipo">Tipo de seguro</label>
+          <select id="tipo" name="tipo">
+            <option value="hogar-basico">Hogar basico</option>
+            <option value="hogar-premium">Hogar premium</option>
+            <option value="auto-basico">Auto basico</option>
+            <option value="auto-premium">Auto premium</option>
+            <option value="salud-basico">Salud basico</option>
+            <option value="salud-premium">Salud premium</option>
+          </select>
+
+          <label for="nombre">Nombre completo</label>
+          <input type="text" id="nombre" name="nombre" placeholder="Tu nombre completo" required />
+
+          <label for="email">Correo electrónico</label>
+          <input type="email" id="email" name="email" placeholder="tu@ejemplo.com" required />
+
+          <label for="telefono">Teléfono</label>
+          <input type="tel" id="telefono" name="telefono" placeholder="(000) 000-0000" />
+
+          <button type="submit">Enviar solicitud</button>
+        </form>
+      </div>
+    </section>
+
+    <section id="testimonios">
+      <div class="container">
+        <h2>Lo que dicen nuestros clientes</h2>
+        <div class="testimonial">
+          <blockquote>“El seguro de hogar me salvó tras inundaciones; la atención fue rápida y eficiente.”</blockquote>
+          <cite>— Paula Martínez</cite>
+        </div>
+        <div class="testimonial">
+          <blockquote>“Excelente red médica y sin esperas; muy satisfecha con mi seguro de salud.”</blockquote>
+          <cite>— Diego Ramírez</cite>
+        </div>
+      </div>
+    </section>
+
+    <section id="contacto">
+      <div class="container">
+        <h2>Contacto</h2>
+        <p>Escríbenos a <a href="mailto:info@segurosia.com">info@segurosia.com</a> o llámanos al <strong>(000) 123-4567</strong>.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      &copy; 2025 Seguros IA. Todos los derechos reservados.
+    </div>
+  </footer>
+
+  <!-- Botón de micrófono (deshabilitado hasta aceptar) -->
+  <button id="micBtn" disabled>
+    <span class="mic-icon">🎤</span>
+  </button>
+
+  <!-- Elementos ocultos para integración del agente -->
+  <button id="disconnectBtn" style="display:none"></button>
+  <button id="connectBtn"    style="display:none"></button>
+  <button id="settingsBtn"   style="display:none"></button>
+  <button id="cameraBtn"     style="display:none"></button>
+  <button id="screenBtn"     style="display:none"></button>
+  <button id="sendBtn"       style="display:none"></button>
+  <input  id="messageInput"  style="display:none" />
+  <canvas id="visualizer"    style="display:none"></canvas>
+
+  <script>
+    document.getElementById('acceptBtn').addEventListener('click', () => {
+      document.getElementById('overlay').style.display = 'none';
+      const mic = document.getElementById('micBtn');
+      mic.disabled = false;
+      mic.click();
+    });
+  </script>
+  <script type="module" src="js/script.js"></script>
+</body>
+</html>
