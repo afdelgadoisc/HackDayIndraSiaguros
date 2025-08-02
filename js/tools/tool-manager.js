@@ -307,6 +307,6 @@ toolManager.registerTool('compareInsurances', new CompareInsurancesTool());
 toolManager.registerTool('fillQuoteForm', new FillQuoteFormTool());
 toolManager.registerTool('getTestimonials', new GetTestimonialsTool());
 toolManager.registerTool('getContactInfo', new GetContactInfoTool());
-toolManager.registerTool('insuranceTechQueryTool', new InsuranceTechQueryTool());
+toolManager.registerTool('getInsuranceTechInfo', new InsuranceTechQueryTool());
 
 export default toolManager;
