@@ -1,56 +1,48 @@
-# Gemini 2.0 Flash Multimodal Live API Client
+# HackDay Indra - Página Web de Seguros con Asistente Gemini
 
-A lightweight vanilla JavaScript implementation of the Gemini 2.0 Flash Multimodal Live API client. This project provides real-time interaction with Gemini's API through text, audio, video, and screen sharing capabilities.
+Este proyecto es una página web de seguros que integra un asistente inteligente alimentado por la API de Gemini. El asistente permite a los usuarios interactuar con la web mediante comandos de voz, facilitando la navegación y la gestión de productos de seguros de manera intuitiva y automatizada.
 
-This is a simplified version of [Google's original React implementation](https://github.com/google-gemini/multimodal-live-api-web-console), created in response to [this issue](https://github.com/google-gemini/multimodal-live-api-web-console/issues/19).
+## ¿Qué ofrece la aplicación?
 
-## Live Demo on GitHub Pages
+- Consulta y comparación de productos de seguros.
+- Relleno y envío automatizado del formulario de cotización.
+- Extracción de testimonios de clientes y datos de contacto.
+- Navegación asistida por voz gracias a la integración con Gemini API.
 
-[Live Demo](https://viaanthroposbenevolentia.github.io/gemini-2-live-api-demo/)
+## ¿Cómo funciona el asistente?
 
-## Key Features
+El asistente escucha comandos de voz del usuario, los interpreta usando la API de Gemini y ejecuta acciones en la página, como mostrar productos, comparar seguros, rellenar formularios o navegar entre secciones.
 
-- Real-time chat with Gemini 2.0 Flash Multimodal Live API
-- Real-time audio responses from the model
-- Real-time audio input from the user, allowing interruptions
-- Real-time video streaming from the user's webcam
-- Real-time screen sharing from the user's screen
-- Function calling
-- Transcription of the model's audio (if Deepgram API key provided)
-- Built with vanilla JavaScript (no dependencies)
-- Mobile-friendly
+## Instrucciones para usar y desplegar en local
 
-## Prerequisites
-
-- Modern web browser with WebRTC, WebSocket, and Web Audio API support
-- Google AI Studio API key
-- `python -m http.server` or `npx http-server` or Live Server extension for VS Code (to host a server for index.html)
-
-## Quick Start
-
-1. Get your API key from Google AI Studio
-2. Clone the repository
-
+1. **Clona este repositorio**  
+   Descarga el proyecto en tu máquina local:
    ```bash
-   git clone https://github.com/ViaAnthroposBenevolentia/gemini-2-live-api-demo.git
+   git clone git@github.com:afdelgadoisc/HackDayIndraSiaguros.git
+   cd HackDayIndraSiaguros
    ```
 
-3. Start the development server (adjust port if needed):
+2. **Obtén tu API key de Gemini**  
+   Regístrate en Google AI Studio y copia tu clave de API.
 
-   ```bash
-   cd gemini-2-live-api-demo
-   python -m http.server 8000 # or npx http-server 8000 or Open with Live Server extension for VS Code
-   ```
+3. **Inicia un servidor local**  
+   Puedes usar Python, Node.js o la extensión Live Server de VS Code:
+   - Con Python:
+     ```bash
+     python -m http.server 8000
+     ```
+   - Con Node.js:
+     ```bash
+     npx http-server 8000
+     ```
+   - O abre la carpeta con VS Code y usa "Open with Live Server".
 
-4. Access the application at `http://localhost:8000`
+4. **Abre la aplicación en tu navegador**  
+   Ve a [http://localhost:8000](http://localhost:8000) y sigue las instrucciones para pegar tu API key de Gemini en la configuración del asistente.
 
-5. Open the settings at the top right, paste your API key, and click "Save"
-6. Get free API key from [Deepgram](https://deepgram.com/pricing) and paste in the settings to get real-time transcript (Optional).
+5. **¡Listo!**  
+   Usa comandos de voz para navegar y gestionar seguros en la web.
 
-## Contributing
+## Licencia
 
-Contributions are welcome! Please feel free to submit issues and pull requests.
-
-## License
-
-This project is licensed under the MIT License.
+MIT

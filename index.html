@@ -218,12 +218,18 @@
 <body>
   <!-- Modal disclaimer -->
   <div id="overlay">
-    <div id="disclaimer">
-      <h2>Permiso de Voz</h2>
-      <p>Para mejorar tu experiencia, necesitamos permiso para monitorear tu navegación por voz. ¿Aceptas?</p>
-      <button id="acceptBtn">Aceptar</button>
+  <div id="disclaimer">
+    <h2>Permiso de Voz</h2>
+    <p>Para mejorar tu experiencia, necesitamos permiso para monitorear tu navegación por voz. ¿Aceptas?</p>
+    <div id="apikey-setup" style="margin: 1.5em 0 0 0; padding: 1em; border: 1px solid #ccc; border-radius: 8px;">
+      <label for="gemini-apikey"><strong>API Key de Gemini:</strong></label>
+      <input type="text" id="gemini-apikey" placeholder="Pega aquí tu API Key" style="width: 80%;" />
+      <button id="save-apikey">Guardar</button>
+      <span id="apikey-status" style="margin-left: 1em; color: green;"></span>
     </div>
+    <button id="acceptBtn">Aceptar</button> 
   </div>
+</div>
 
   <header>
     <div class="container nav-container">
@@ -241,6 +247,12 @@
   </header>
 
   <main>
+    <div id="apikey-setup" style="margin: 2em 0; padding: 1em; border: 1px solid #ccc; max-width: 400px;">
+      <label for="gemini-apikey"><strong>API Key de Gemini:</strong></label>
+      <input type="text" id="gemini-apikey" placeholder="Pega aquí tu API Key" style="width: 80%;" />
+      <button id="save-apikey">Guardar</button>
+      <span id="apikey-status" style="margin-left: 1em; color: green;"></span>
+    </div>
     <div id="avatarAsistente">
       <img src="https://cdn-icons-png.flaticon.com/512/4712/4712100.png" alt="Asistente Virtual" />
       <div class="mensaje">
@@ -474,6 +486,26 @@
       mic.click();
     });
   </script>
-  <script type="module" src="js/script.js"></script>
+  <script>
+  
+  document.getElementById('gemini-apikey').value = localStorage.getItem('apiKey') || '';
+
+  document.getElementById('save-apikey').onclick = function() {
+    const key = document.getElementById('gemini-apikey').value.trim();
+    if (key) {
+      localStorage.setItem('apiKey', key);
+      document.getElementById('apikey-status').textContent = '¡Guardada!';
+      setTimeout(() => document.getElementById('apikey-status').textContent = '', 2000);
+    } else {
+      document.getElementById('apikey-status').textContent = 'Ingresa una clave válida';
+      document.getElementById('apikey-status').style.color = 'red';
+      setTimeout(() => {
+        document.getElementById('apikey-status').textContent = '';
+        document.getElementById('apikey-status').style.color = 'green';
+      }, 2000);
+    }
+  };
+</script>
+  <script type="module" src="./js/script.js"></script>
 </body>
 </html>
