@@ -48,6 +48,7 @@ export const getConfig = () => ({
                     Rellena solo los campos proporcionados y pide confirmación del email para enviar el formulario.  
                 • Si la consulta es sobre lo que dicen otros clientes: GetTestimonialsTool  
                 • Si la consulta es sobre cómo contactar a la empresa: GetContactInfoTool  
+                • Si es una pregunta técnica sobre seguros: InsuranceTechQueryTool
 
             3. Tras ejecutar cada herramienta, reúne sus resultados (detalles de pólizas, comparativas,
                 explicación de términos, confirmación de envío, testimonios o datos de contacto) y preséntalos

@@ -247,6 +247,58 @@ class GetContactInfoTool {
   }
 }
 
+class InsuranceTechQueryTool {
+  getDeclaration() {
+    return {
+      name: "getInsuranceTechInfo",
+      description: "Cuando el usuario hace una consulta técnica sobre seguros, envía la pregunta al webhook de n8n y devuelve la respuesta generada.",
+      parameters: {
+        type: "object",
+        properties: {
+          question: {
+            type: "string",
+            description: "La pregunta técnica que el usuario hace sobre seguros",
+            default: ""
+          }
+        },
+        required: ["question"]
+      }
+    };
+  }
+
+  async execute({ question = "" }) {
+    if (!question.trim()) {
+      throw new Error("El parámetro `question` no puede estar vacío.");
+    }
+
+    // URL de tu webhook de n8n que maneja preguntas técnicas
+    const webhookUrl = "https://n8n.afdelgadoisc.com/webhook/9f0f3f03-5bf9-4596-a222-77ae6281fb7f";
+
+    // Construimos el payload con la pregunta
+    const payload = { question };
+
+    // Llamada al webhook
+    const res = await fetch(webhookUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    if (!res.ok) {
+      throw new Error(`Error al consultar info técnica: ${res.status} ${res.statusText}`);
+    }
+
+    // Suponemos que el webhook devuelve un JSON { answer: "..." }
+    const { answer } = await res.json();
+    if (!answer) {
+      throw new Error("El webhook no devolvió una respuesta válida.");
+    }
+
+    return answer;
+  }
+}
+
+
 // Instanciación y registro de herramientas
 const toolManager = new ToolManager();
 
@@ -255,5 +307,6 @@ toolManager.registerTool('compareInsurances', new CompareInsurancesTool());
 toolManager.registerTool('fillQuoteForm', new FillQuoteFormTool());
 toolManager.registerTool('getTestimonials', new GetTestimonialsTool());
 toolManager.registerTool('getContactInfo', new GetContactInfoTool());
+toolManager.registerTool('insuranceTechQueryTool', new InsuranceTechQueryTool());
 
 export default toolManager;
